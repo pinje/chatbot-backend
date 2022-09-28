@@ -1,0 +1,26 @@
+2fa could be there
+
+
+-portal.azure.com with fontys credentials
+
+resource group for group 3 is ours
+
+CAREFUL WITH SERVICES THEY COST A TON OF MONEY!!!!!!!
+
+
+service plans are mandatory for environment, budget is monitored through there
+
+currently present: SQL Server, SQL database, service
+URL is for deployment, currently is up and running 
+
+FTPS Services need to be toggled on FTPS only always, otherwise a notification is sent to Flip
+
+SSL setting should be HTTPS ON and TLS always 1.2 (no certificates needed)
+if certificates are needed we contact Flip
+
+storing sensitive code - kudu console used to store above wwwroot (makes it not publicly available)
+
+in order to use DB, allow a firewall rule with your ip to have access
+
+
+
