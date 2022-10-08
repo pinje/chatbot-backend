@@ -7,6 +7,7 @@ import sem3chatbot.backend.business.exception.NoBlankQuestionsException;
 import sem3chatbot.backend.domain.BotResponse;
 import sem3chatbot.backend.domain.UserInput;
 
+
 @Service
 @AllArgsConstructor
 public class ResponseServiceImpl implements ResponseService {
