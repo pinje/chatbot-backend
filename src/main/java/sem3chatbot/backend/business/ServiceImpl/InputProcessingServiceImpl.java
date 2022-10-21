@@ -10,6 +10,8 @@ import sem3chatbot.backend.persistence.entity.KeywordEntity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -28,13 +30,20 @@ public class InputProcessingServiceImpl implements InputProcessingService {
         //and free up memory
         keywordEntities.clear();
 
-       for(int i = 0; i < requestWords.length; i++){
-           for(int j = i + 1; j < requestWords.length - 1; j++){
-               if(keywords.get(i).getText().equals(requestWords[j])){
-                   matches.put(i, requestWords[j]);
-               }
-           }
-       }
+      List<String> results = keywords.stream().map(Keyword::getText).toList();
+        for(int i = 0; i < requestWords.length; i++){
+            if(results.contains(requestWords[i])){
+                matches.put(i, requestWords[i]);
+            }
+        }
+
+//       for(int i = 0; i < requestWords.length; i++){
+//           for(int j = 0; j < keywords.size(); j++){
+//               if(keywords.get(j).getText().equals(requestWords[i])){
+//                   matches.put(j, requestWords[i]);
+//               }
+//           }
+//       }
        return matches;
 
 
