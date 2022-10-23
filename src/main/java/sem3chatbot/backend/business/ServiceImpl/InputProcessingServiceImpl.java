@@ -21,13 +21,10 @@ public class InputProcessingServiceImpl implements InputProcessingService {
 
     public HashMap<Integer, String> findMatches(UserInput request){
         HashMap<Integer, String> matches = new HashMap<>();
-        //getting the words from the sentence, regex takes care of spaces, commas and semicolons
         String[] requestWords = request.getQuestion().split("\\W+");
         List<KeywordEntity> keywordEntities = keywordRepository.findAll();
 
         List<Keyword> keywords = keywordEntities.stream().map(KeywordConverter::convert).toList();
-        //clearing all objects from the list and making them null, so that the garbage collector can clean them up
-        //and free up memory
         keywordEntities.clear();
 
       List<String> results = keywords.stream().map(Keyword::getText).toList();
@@ -36,19 +33,10 @@ public class InputProcessingServiceImpl implements InputProcessingService {
                 matches.put(i, requestWords[i]);
             }
         }
-
-//       for(int i = 0; i < requestWords.length; i++){
-//           for(int j = 0; j < keywords.size(); j++){
-//               if(keywords.get(j).getText().equals(requestWords[i])){
-//                   matches.put(j, requestWords[i]);
-//               }
-//           }
-//       }
        return matches;
-
-
-
-
-
     }
+    //TODO: Match phrases instead of singular words
+//    public String[] matchPhrases(UserInput request) {
+//
+//    }
 }
