@@ -19,36 +19,19 @@ public class InputProcessingServiceImpl implements InputProcessingService {
 
     private KeywordRepository keywordRepository;
 
-    public HashMap<Integer, String> findMatches(UserInput request){
-        HashMap<Integer, String> matches = new HashMap<>();
-        //getting the words from the sentence, regex takes care of spaces, commas and semicolons
-        String[] requestWords = request.getQuestion().split("\\W+");
+    public HashMap<Long, String> findMatches(UserInput request){
+        HashMap<Long, String> matches = new HashMap<>();
+        String question = request.getQuestion();
         List<KeywordEntity> keywordEntities = keywordRepository.findAll();
 
         List<Keyword> keywords = keywordEntities.stream().map(KeywordConverter::convert).toList();
-        //clearing all objects from the list and making them null, so that the garbage collector can clean them up
-        //and free up memory
         keywordEntities.clear();
-
-      List<String> results = keywords.stream().map(Keyword::getText).toList();
-        for(int i = 0; i < requestWords.length; i++){
-            if(results.contains(requestWords[i])){
-                matches.put(i, requestWords[i]);
+        for (Keyword keyword : keywords) {
+            if (question.contains(keyword.getText())) {
+                matches.put(keyword.getId(), keyword.getText());
             }
         }
-
-//       for(int i = 0; i < requestWords.length; i++){
-//           for(int j = 0; j < keywords.size(); j++){
-//               if(keywords.get(j).getText().equals(requestWords[i])){
-//                   matches.put(j, requestWords[i]);
-//               }
-//           }
-//       }
        return matches;
-
-
-
-
-
     }
+
 }

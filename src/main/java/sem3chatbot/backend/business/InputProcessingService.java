@@ -6,5 +6,5 @@ import sem3chatbot.backend.domain.UserInput;
 import java.util.HashMap;
 
 public interface InputProcessingService {
-    HashMap<Integer, String> findMatches(UserInput request);
+    HashMap<Long, String> findMatches(UserInput request);
 }
