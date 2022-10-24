@@ -33,8 +33,5 @@ public class InputProcessingServiceImpl implements InputProcessingService {
         }
        return matches;
     }
-    //TODO: Match phrases instead of singular words
-//    public String[] matchPhrases(UserInput request) {
-//
-//    }
+
 }

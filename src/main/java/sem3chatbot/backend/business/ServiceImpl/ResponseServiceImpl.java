@@ -23,7 +23,7 @@ public class ResponseServiceImpl implements ResponseService {
             throw new NoBlankQuestionsException();
         }
         //currently does not account for phrases(e.g 3rd semester), single words only
-        HashMap<Integer, String> matches = processor.findMatches(request);
+        HashMap<Long, String> matches = processor.findMatches(request);
         return BotResponse.builder()
                 .response(matches.values().toString())
                 .build();
