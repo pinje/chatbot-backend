@@ -19,18 +19,16 @@ public class InputProcessingServiceImpl implements InputProcessingService {
 
     private KeywordRepository keywordRepository;
 
-    public HashMap<Integer, String> findMatches(UserInput request){
-        HashMap<Integer, String> matches = new HashMap<>();
-        String[] requestWords = request.getQuestion().split("\\W+");
+    public HashMap<Long, String> findMatches(UserInput request){
+        HashMap<Long, String> matches = new HashMap<>();
+        String question = request.getQuestion();
         List<KeywordEntity> keywordEntities = keywordRepository.findAll();
 
         List<Keyword> keywords = keywordEntities.stream().map(KeywordConverter::convert).toList();
         keywordEntities.clear();
-
-      List<String> results = keywords.stream().map(Keyword::getText).toList();
-        for(int i = 0; i < requestWords.length; i++){
-            if(results.contains(requestWords[i])){
-                matches.put(i, requestWords[i]);
+        for (Keyword keyword : keywords) {
+            if (question.contains(keyword.getText())) {
+                matches.put(keyword.getId(), keyword.getText());
             }
         }
        return matches;
