@@ -37,8 +37,9 @@ public class InputProcessingServiceImpl implements InputProcessingService {
     // in getting a sufficient answer. As of now, lets assume that every question
     // contains only three types of keywords and not doubles.
     public HashMap<String, Long> findMatches(UserInput request){
+        //Long -> Long[]
         HashMap<String, Long> matches = new HashMap<>();
-        String question = request.getQuestion();
+        String question = request.getQuestion().toLowerCase();
         List<KeywordEntity> keywordEntities = keywordRepository.findAll();
 
         List<Keyword> keywords = keywordEntities.stream().map(KeywordConverter::convert).toList();
@@ -50,19 +51,22 @@ public class InputProcessingServiceImpl implements InputProcessingService {
         }
        return matches;
     }
-
     // Currently in the If statement, placeholder Keys are used.
     // This should be corrected using the right types in the DB.
     public String findAnswer(HashMap<String, Long> matchedKeywords){
         List<Answer> answers = answerRepository.findAll().stream().map(AnswerConverter::convert).toList();
+
+        System.out.println(matchedKeywords.get("question"));
+        System.out.println(matchedKeywords.get("auxiliary"));
+        System.out.println(matchedKeywords.get("topic"));
         for(Answer answer: answers){
             // Checking if the combination of the keywords in the question
             if(
-                    answer.getQuestionsKeyword().getType().equals("question")
+                    answer.getQuestionsKeyword().getId().equals(matchedKeywords.get("question"))
                             &&
-                            answer.getSecondaryKeyword().getType().equals("auxiliary")
+                            answer.getSecondaryKeyword().getId().equals(matchedKeywords.get("auxiliary"))
                             &&
-                            answer.getTertiaryKeyword().getType().equals("topic")
+                            answer.getTertiaryKeyword().getId().equals(matchedKeywords.get("topic"))
             ){
                 // Retrieving the right solution and returning this.
                 Solution solution = SolutionConverter.convert(solutionRepository.getReferenceById(answer.getSolution().getId()));
