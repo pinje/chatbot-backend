@@ -1,35 +1,27 @@
 package sem3chatbot.backend.persistence.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
-@Table(name = "keywords")
+@Table(name = "solutions")
 @Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KeywordEntity {
+public class SolutionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    //key is unique because we wouldn't want to duplicate already existing words into the db, makes it easier
-    //to iterate over it afterwards
-    @Column(unique = true, name = "text")
+    // This would represent the URL of a fontys page for example for the current version of the chatbot.
+    //
+    @Column(unique = true, name = "answerText")
     private String text;
-
-    @Column(name = "timestamp")
-    private Date timestamp;
-
-    @Column(name = "type")
-    private String type;
 }

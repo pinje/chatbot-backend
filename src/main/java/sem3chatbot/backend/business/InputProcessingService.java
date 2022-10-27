@@ -6,5 +6,10 @@ import sem3chatbot.backend.domain.UserInput;
 import java.util.HashMap;
 
 public interface InputProcessingService {
-    HashMap<Long, String> findMatches(UserInput request);
+    HashMap<String, Long> findMatches(UserInput request);
+
+    // matchedKeywords  -> Key: Type of keyword, Value: ID of the keyword
+    // The combination of keyword IDs will return the value for a proper response
+    //
+    String findAnswer(HashMap<String, Long> matchedKeywords);
 }
