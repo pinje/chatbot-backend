@@ -27,8 +27,6 @@ public class InputProcessingServiceImpl implements InputProcessingService {
     private KeywordRepository keywordRepository;
     private AnswerRepository answerRepository;
     private SolutionRepository solutionRepository;
-
-
     //
     // This method returns now a HashMap of the keywords:
     //      - Key: Type of the keyword
@@ -57,8 +55,21 @@ public class InputProcessingServiceImpl implements InputProcessingService {
     // This should be corrected using the right types in the DB.
     public String findAnswer(HashMap<String, Long> matchedKeywords){
         List<Answer> answers = answerRepository.findAll().stream().map(AnswerConverter::convert).toList();
-
-
+        for(Answer answer: answers){
+            // Checking if the combination of the keywords in the question
+            if(
+                    answer.getQuestionsKeyword().getType().equals("question")
+                            &&
+                            answer.getSecondaryKeyword().getType().equals("auxiliary")
+                            &&
+                            answer.getTertiaryKeyword().getType().equals("topic")
+            ){
+                // Retrieving the right solution and returning this.
+                Solution solution = SolutionConverter.convert(solutionRepository.getReferenceById(answer.getSolution().getId()));
+                String result = "You can find an answer for your question on " + solution.getText();
+                return result;
+            }
+        }
         throw new SolutionNotFoundException();
     }
 

@@ -9,6 +9,7 @@ public class KeywordConverter {
                 .id(entity.getId())
                 .text(entity.getText())
                 .timestamp(entity.getTimestamp())
+                .type(entity.getType())
                 .build();
     }
 }

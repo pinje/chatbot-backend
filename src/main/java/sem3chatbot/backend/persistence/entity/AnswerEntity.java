@@ -21,7 +21,6 @@ public class AnswerEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @JoinColumn(name = "questionKeywordId")
     @OneToOne
     private KeywordEntity questionsKeyword;
