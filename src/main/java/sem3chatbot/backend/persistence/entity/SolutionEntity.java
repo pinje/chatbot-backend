@@ -22,6 +22,6 @@ public class SolutionEntity {
 
     // This would represent the URL of a fontys page for example for the current version of the chatbot.
     //
-    @Column(unique = true, name = "text")
+    @Column(unique = true, name = "answerText")
     private String text;
 }

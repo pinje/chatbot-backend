@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import sem3chatbot.backend.persistence.entity.SolutionEntity;
 
 @Repository
-public interface SolutionRepository extends JpaRepository<SolutionEntity, Long> {
+public interface SolutionRepository extends JpaRepository<SolutionEntity, Long>{
 }

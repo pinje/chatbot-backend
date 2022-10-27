@@ -3,6 +3,7 @@ package sem3chatbot.backend.business.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sem3chatbot.backend.business.InputProcessingService;
+import sem3chatbot.backend.business.exception.SolutionNotFoundException;
 import sem3chatbot.backend.domain.UserInput;
 import sem3chatbot.backend.domain.answers.Answer;
 import sem3chatbot.backend.domain.answers.Solution;
@@ -16,6 +17,7 @@ import sem3chatbot.backend.persistence.entity.SolutionEntity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -54,31 +56,10 @@ public class InputProcessingServiceImpl implements InputProcessingService {
     // Currently in the If statement, placeholder Keys are used.
     // This should be corrected using the right types in the DB.
     public String findAnswer(HashMap<String, Long> matchedKeywords){
-
-        // Instead of first getting all the answers in the DB, using a query where you check these
-        // parameters might be better.
         List<Answer> answers = answerRepository.findAll().stream().map(AnswerConverter::convert).toList();
 
-        // Standard message
-        String result = "Something went wrong! Try it again later.";
-        for(Answer answer: answers){
 
-            // Checking if the combination of the keywords in the question
-            // from the user matches an answer in the DB
-            if(
-                    answer.getQuestionsKeyword().equals(matchedKeywords.get("QUESTION"))
-                    &&
-                    answer.getSecondaryKeyword().equals(matchedKeywords.get("KW_TWO"))
-                    &&
-                    answer.getTertiaryKeyword().equals(matchedKeywords.get("KW_THREE"))
-            ){
-                // Retrieving the right solution and returning this.
-                Solution solution = SolutionConverter.convert(solutionRepository.getReferenceById(answer.getSolution()));
-                result = "You can find an answer for your question on " + solution.getText();
-            }
-        }
-
-        return result;
+        throw new SolutionNotFoundException();
     }
 
 }

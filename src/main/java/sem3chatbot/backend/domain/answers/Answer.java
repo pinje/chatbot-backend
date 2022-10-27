@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sem3chatbot.backend.domain.keywords.Keyword;
 
 @Builder
 @Data
@@ -11,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Answer {
     private Long id;
-    private Long questionsKeyword;
-    private Long secondaryKeyword;
-    private Long tertiaryKeyword;
-    private Long solution;
+    private Keyword questionsKeyword;
+    private Keyword secondaryKeyword;
+    private Keyword tertiaryKeyword;
+    private Solution solution;
 }
