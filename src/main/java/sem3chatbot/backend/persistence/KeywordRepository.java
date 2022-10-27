@@ -6,4 +6,5 @@ import sem3chatbot.backend.persistence.entity.KeywordEntity;
 
 @Repository
 public interface KeywordRepository extends JpaRepository<KeywordEntity, Long> {
+
 }

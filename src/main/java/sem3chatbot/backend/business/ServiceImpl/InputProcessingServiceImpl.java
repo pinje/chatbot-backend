@@ -12,12 +12,8 @@ import sem3chatbot.backend.persistence.AnswerRepository;
 import sem3chatbot.backend.persistence.KeywordRepository;
 import sem3chatbot.backend.persistence.SolutionRepository;
 import sem3chatbot.backend.persistence.entity.KeywordEntity;
-import sem3chatbot.backend.persistence.entity.SolutionEntity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -27,54 +23,63 @@ public class InputProcessingServiceImpl implements InputProcessingService {
     private KeywordRepository keywordRepository;
     private AnswerRepository answerRepository;
     private SolutionRepository solutionRepository;
-    //
-    // This method returns now a HashMap of the keywords:
-    //      - Key: Type of the keyword
-    //      - Value: ID of the keyword
-    //
-    // The intention is to have three unique types in the return, but as of now
-    // there is no prevention of this. This would lead into a lot of problems
-    // in getting a sufficient answer. As of now, lets assume that every question
-    // contains only three types of keywords and not doubles.
-    public HashMap<String, Long> findMatches(UserInput request){
+
+    public HashMap<String, long[]> findMatches(UserInput request){
         //Long -> Long[]
-        HashMap<String, Long> matches = new HashMap<>();
+        HashMap<String, long[]> matches = new HashMap<>();
         String question = request.getQuestion().toLowerCase();
         List<KeywordEntity> keywordEntities = keywordRepository.findAll();
 
         List<Keyword> keywords = keywordEntities.stream().map(KeywordConverter::convert).toList();
         keywordEntities.clear();
-        for (Keyword keyword : keywords) {
-            if (question.contains(keyword.getText())) {
-                matches.put(keyword.getType(), keyword.getId());
-            }
-        }
+        long[] questionIds = groupKeywords(keywords, "question", question);
+        long[] topicIds = groupKeywords(keywords, "topic", question);
+        long[] auxiliaryIds = groupKeywords(keywords, "auxiliary", question);
+
+        matches.put("question", questionIds);
+        matches.put("topic", topicIds);
+        matches.put("auxiliary", auxiliaryIds);
+
        return matches;
     }
-    // Currently in the If statement, placeholder Keys are used.
-    // This should be corrected using the right types in the DB.
-    public String findAnswer(HashMap<String, Long> matchedKeywords){
+
+    public String findAnswer(HashMap<String, long[]> matchedKeywords) {
         List<Answer> answers = answerRepository.findAll().stream().map(AnswerConverter::convert).toList();
 
-        System.out.println(matchedKeywords.get("question"));
-        System.out.println(matchedKeywords.get("auxiliary"));
-        System.out.println(matchedKeywords.get("topic"));
-        for(Answer answer: answers){
-            // Checking if the combination of the keywords in the question
-            if(
-                    answer.getQuestionsKeyword().getId().equals(matchedKeywords.get("question"))
-                            &&
-                            answer.getSecondaryKeyword().getId().equals(matchedKeywords.get("auxiliary"))
-                            &&
-                            answer.getTertiaryKeyword().getId().equals(matchedKeywords.get("topic"))
-            ){
-                // Retrieving the right solution and returning this.
-                Solution solution = SolutionConverter.convert(solutionRepository.getReferenceById(answer.getSolution().getId()));
-                String result = "You can find an answer for your question on " + solution.getText();
-                return result;
+        System.out.println(Arrays.toString(matchedKeywords.get("question")));
+        System.out.println(Arrays.toString(matchedKeywords.get("auxiliary")));
+        System.out.println(Arrays.toString(matchedKeywords.get("topic")));
+//        for(Answer answer: answers){
+        // Checking if the combination of the keywords in the question
+//            if(
+//                    answer.getQuestionsKeyword().getId().equals(matchedKeywords.get("question"))
+//                            &&
+//                            answer.getSecondaryKeyword().getId().equals(matchedKeywords.get("auxiliary"))
+//                            &&
+//                            answer.getTertiaryKeyword().getId().equals(matchedKeywords.get("topic"))
+//            ){
+//                // Retrieving the right solution and returning this.
+//                Solution solution = SolutionConverter.convert(solutionRepository.getReferenceById(answer.getSolution().getId()));
+//                return "You can find an answer for your question on " + solution.getText();
+//            }
+   // }
+        return null;
+    }
+
+    private long[] groupKeywords(List<Keyword> keywords, String type, String question){
+        List<Keyword> initial = new ArrayList<>();
+        for (int i = 0; i < keywords.size(); i++) {
+            if (question.contains(keywords.get(i).getText()) && keywords.get(i).getType().equals(type)) {
+                initial.add(keywords.get(i));
             }
         }
-        throw new SolutionNotFoundException();
+        long[] results = new long[initial.size()];
+        //im a genius lol
+        int j = 0;
+        for(Keyword k : initial){
+          results[j++] = k.getId();
+        }
+        return results;
     }
 
 }

@@ -14,14 +14,14 @@ import java.util.HashMap;
 @Service
 @AllArgsConstructor
 public class ResponseServiceImpl implements ResponseService {
-    InputProcessingService processor;
+    private InputProcessingService processor;
 
     public BotResponse processQuestion(UserInput request){
         if(request.getQuestion() == null || request.getQuestion().equals("")){
             throw new NoBlankQuestionsException();
         }
         //currently does not account for phrases(e.g 3rd semester), single words only
-        HashMap<String, Long> matches = processor.findMatches(request);
+        HashMap<String, long[]> matches = processor.findMatches(request);
         return BotResponse.builder()
                 .response(processor.findAnswer(matches))
                 .build();
