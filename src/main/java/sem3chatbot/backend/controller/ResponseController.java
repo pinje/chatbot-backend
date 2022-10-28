@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sem3chatbot.backend.business.ResponseService;
 import sem3chatbot.backend.domain.BotResponse;
 import sem3chatbot.backend.domain.UserInput;
@@ -15,6 +12,7 @@ import sem3chatbot.backend.domain.UserInput;
 @RestController
 @RequestMapping("/responses")
 @AllArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class ResponseController {
     private final ResponseService responseService;
 
