@@ -29,7 +29,9 @@ public class InputProcessingServiceImpl implements InputProcessingService {
         HashMap<String, long[]> matches = new HashMap<>();
         String question = request.getQuestion().toLowerCase();
         List<KeywordEntity> keywordEntities = keywordRepository.findAll();
-
+        //HashMap<String, long[]> keywords = keywordRepository.findByType("type");
+        //hashmap pulls the arrays from the keywords table, keys = types of keywords
+        //add new words to db when a user types a question
         List<Keyword> keywords = keywordEntities.stream().map(KeywordConverter::convert).toList();
         keywordEntities.clear();
         long[] questionIds = groupKeywords(keywords, "question", question);
