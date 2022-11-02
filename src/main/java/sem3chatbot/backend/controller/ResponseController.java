@@ -12,7 +12,7 @@ import sem3chatbot.backend.domain.UserInput;
 @RestController
 @RequestMapping("/responses")
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net"})
 public class ResponseController {
     private final ResponseService responseService;
 
