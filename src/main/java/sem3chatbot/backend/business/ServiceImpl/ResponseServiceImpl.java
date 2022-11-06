@@ -9,6 +9,7 @@ import sem3chatbot.backend.domain.BotResponse;
 import sem3chatbot.backend.domain.UserInput;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 @Service
@@ -21,7 +22,7 @@ public class ResponseServiceImpl implements ResponseService {
             throw new NoBlankQuestionsException();
         }
         //currently does not account for phrases(e.g 3rd semester), single words only
-        HashMap<String, long[]> matches = processor.findMatches(request);
+        HashMap<String, List<Long>> matches = processor.findMatches(request);
         return BotResponse.builder()
                 .response(processor.findAnswer(matches))
                 .build();
