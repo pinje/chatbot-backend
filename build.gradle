@@ -27,6 +27,8 @@ dependencies {
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
 }
 azurewebapp {
+	resourceGroup = 'PIE-SES3-GRP3'
+	appName = 'pie3bot'
 	runtime {
 		os = 'windows'
 		javaVersion = 'Java 17'
