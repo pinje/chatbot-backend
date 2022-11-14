@@ -8,9 +8,8 @@ public class AnswerConverter {
     public static Answer convert(AnswerEntity entity){
         return Answer.builder()
                 .id(entity.getId())
-                .questionsKeyword(KeywordConverter.convert(entity.getQuestionsKeyword()))
-                .secondaryKeyword(KeywordConverter.convert(entity.getSecondaryKeyword()))
-                .tertiaryKeyword(KeywordConverter.convert(entity.getTertiaryKeyword()))
+                .secondaryKeywords(entity.getSecondaryKeywords())
+                .tertiaryKeywords(entity.getTertiaryKeywords())
                 .solution(SolutionConverter.convert(entity.getSolution()))
                 .build();
     }

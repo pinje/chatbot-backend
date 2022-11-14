@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.4'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'java'
+	id "com.microsoft.azure.azurewebapp" version "1.2.0"
 }
 
 group = 'sem3-chatbot'
@@ -25,7 +26,15 @@ dependencies {
 	implementation 'com.microsoft.sqlserver:mssql-jdbc:11.2.1.jre11'
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
 }
-
+azurewebapp {
+	resourceGroup = 'PIE-SES3-GRP3'
+	appName = 'pie3bot'
+	runtime {
+		os = 'windows'
+		javaVersion = 'Java 17'
+		webContainer = 'Java SE'
+	}
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }

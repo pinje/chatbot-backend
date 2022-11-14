@@ -5,22 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import sem3chatbot.backend.business.ResponseService;
 import sem3chatbot.backend.domain.BotResponse;
 import sem3chatbot.backend.domain.UserInput;
 
 @RestController
-@RequestMapping("/responses")
+@RequestMapping("")
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net"}, allowedHeaders = {"*"})
-public class ResponseController {
-    private final ResponseService responseService;
-
-    @PostMapping()
-    public ResponseEntity<BotResponse> processQuestion(@RequestBody @Validated UserInput request){
-        BotResponse res = responseService.processQuestion(request);
-        return ResponseEntity.status(HttpStatus.OK).body(res);
-    }
+@CrossOrigin(origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net"})
+public class MainPageController{
 
     @GetMapping()
     public ResponseEntity<String> processQuestion () {
