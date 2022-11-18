@@ -21,10 +21,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-//	runtimeOnly 'mysql:mysql-connector-java'
-//	implementation 'mysql:mysql-connector-java:8.0.30'
 	implementation 'com.microsoft.sqlserver:mssql-jdbc:11.2.1.jre11'
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
+	implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
 }
 azurewebapp {
 	resourceGroup = 'PIE-SES3-GRP3'
