@@ -17,7 +17,7 @@ public class SearchEngineController {
     private final SearchEngineService searchEngineService;
     @GetMapping()
     public ResponseEntity<SearchEngineTopThreeResponse> getTopThreeLinks(@RequestParam(value = "q") String query) throws IOException {
-        SearchEngineTopThreeResponse res = searchEngineService.getTopLinksFromSearchQuery(query);
+        SearchEngineTopThreeResponse res = searchEngineService.getTopLinksFromSearchQuery(query, 5);
         return ResponseEntity.ok(res);
     }
 }

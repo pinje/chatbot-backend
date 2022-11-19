@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.util.Set;
 
 public interface SearchEngineService {
-    SearchEngineTopThreeResponse getTopLinksFromSearchQuery(String queryString) throws IOException;
+    SearchEngineTopThreeResponse getTopLinksFromSearchQuery(String queryString, int limit) throws IOException;
 }
