@@ -12,7 +12,6 @@ import sem3chatbot.backend.domain.keywords.Keyword;
 @NoArgsConstructor
 public class Answer {
     private Long id;
-    private String questionsKeywords;
     private String secondaryKeywords;
     private String tertiaryKeywords;
     private Solution solution;

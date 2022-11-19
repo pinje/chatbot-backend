@@ -8,7 +8,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import sem3chatbot.backend.business.exception.NoBlankQuestionsException;
 import sem3chatbot.backend.business.exception.SolutionNotFoundException;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
