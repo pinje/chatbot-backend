@@ -2,7 +2,6 @@ package sem3chatbot.backend.business.ServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,14 +18,16 @@ import java.util.Set;
 public class SearchEngineServiceImpl implements SearchEngineService {
 
     @Override
-    public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(String queryString, int limit) throws IOException {
-        String searchUrl = "https://google.com/search?q=";
+    public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(final String queryString, final int limit) throws IOException {
+        //TODO: separate spaces with '+' to be compatible with google search query standards
+        // in order to search for sentences and not words only
+        String searchUrl = "https://google.com/search?q=" + queryString + "&num=" + limit;
         print("Searching..." + searchUrl);
-        print(searchUrl + queryString);
-        Document rawHtml = Jsoup.connect(searchUrl + queryString + "&num=" + limit )
+        Document rawHtml = Jsoup.connect(searchUrl)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
                 .get();
         Set<String> links = findLinks(rawHtml);
+        links.remove("");
         print("Returning " + links.size() + " trimmed links");
         return SearchEngineTopThreeResponse.builder()
                 .links(links)
@@ -34,24 +35,29 @@ public class SearchEngineServiceImpl implements SearchEngineService {
     }
 
     private Set<String> findLinks(Document html){
-        Set<String> results = new HashSet<>();
-        //the selector here for the query needs to be correct to actually get search result links
         Elements links = html.getElementsByTag("a");
         print("Total links found: " + links.size());
-
         if(links.size() == 0){
             return new HashSet<>();
         }
-        for(int i = 0; i < links.size(); i++){
-            String nodeUrl = links.get(i).attr("ping");
-            if(!nodeUrl.startsWith("https://policies") && !nodeUrl.startsWith("https://support")){
-                if(nodeUrl.length() > 1){
-                    String redirectUrl = nodeUrl.substring(31);
-                    int cutIndex = getDomainUrl(redirectUrl);
-                    String actualUrl = redirectUrl.substring(0, cutIndex);
-                    results.add(actualUrl);
+        Set<String> results = new HashSet<>();
+        for (Element link : links) {
+            String nodeUrl = link.attr("ping");
+                if (nodeUrl.length() > 1) {
+                    try {
+                        String redirectUrl = nodeUrl.substring(31);
+                        int cutIndex = getDomainUrl(redirectUrl);
+                        String actualUrl = redirectUrl.substring(0, cutIndex + 1);
+                        if(!actualUrl.startsWith("https://policies") &&
+                                !actualUrl.startsWith("https://support") &&
+                                !actualUrl.startsWith("https://translate")){
+                            results.add(actualUrl);
+                        }
+                    }
+                    catch(StringIndexOutOfBoundsException ex){
+                        print("Query string threw an exception: " + ex.getMessage());
+                    }
                 }
-            }
         }
         return results;
     }
@@ -61,7 +67,6 @@ public class SearchEngineServiceImpl implements SearchEngineService {
         System.out.printf((text) + "%n", args);
     }
     private int getDomainUrl(String absUrl){
-        char slash = '/';
         int occurences = 0;
         for(int i = 0; i < absUrl.length(); i++){
             if(absUrl.charAt(i) == '/'){
