@@ -1,5 +1,6 @@
 package sem3chatbot.backend.business.ServiceImpl;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import sem3chatbot.backend.business.SearchEngineService;
+import sem3chatbot.backend.business.UrlSanitizerService;
 import sem3chatbot.backend.domain.answers.SearchEngineTopThreeResponse;
 
 import java.io.IOException;
@@ -14,18 +16,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class SearchEngineServiceImpl implements SearchEngineService {
+    private final UrlSanitizerService urlSanitizerService;
 
     @Override
-    public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(final String queryString, final int limit) throws IOException {
-        //TODO: separate spaces with '+' to be compatible with google search query standards
-        // in order to search for sentences and not words only
-        String searchUrl = "https://google.com/search?q=" + queryString + "&num=" + limit;
+    public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(final String queryString, int limit) throws IOException {
+
+        String queryStringInjected = injectSeparator(queryString);
+        //dynamically change the result limit to accommodate longer search queries
+        if(queryStringInjected.contains("+")){
+            limit = 10;
+        }
+        print("Query string format: " + queryStringInjected);
+        String searchUrl = "https://google.com/search?q=" + queryStringInjected + "&num=" + limit;
         print("Searching..." + searchUrl);
-        Document rawHtml = Jsoup.connect(searchUrl)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
-                .get();
+            Document rawHtml = Jsoup.connect(searchUrl)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
+                    .referrer("http://www.google.com")
+                    .get();
+
         Set<String> links = findLinks(rawHtml);
         links.remove("");
         print("Returning " + links.size() + " trimmed links");
@@ -47,10 +57,11 @@ public class SearchEngineServiceImpl implements SearchEngineService {
                     try {
                         String redirectUrl = nodeUrl.substring(31);
                         int cutIndex = getDomainUrl(redirectUrl);
-                        String actualUrl = redirectUrl.substring(0, cutIndex + 1);
+                        String actualUrl = redirectUrl.substring(0, cutIndex);
                         if(!actualUrl.startsWith("https://policies") &&
                                 !actualUrl.startsWith("https://support") &&
-                                !actualUrl.startsWith("https://translate")){
+                                !actualUrl.startsWith("https://translate") &&
+                                !urlSanitizerService.isSanitizable(actualUrl)){
                             results.add(actualUrl);
                         }
                     }
@@ -77,5 +88,9 @@ public class SearchEngineServiceImpl implements SearchEngineService {
             }
         }
       return -1;
+    }
+
+    private String injectSeparator(String queryString){
+       return queryString.replace(' ', '+');
     }
 }

@@ -4,25 +4,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sem3chatbot.backend.business.UrlSanitizerService;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UrlSanitizerServiceImpl implements UrlSanitizerService {
 
     @Override
-    public void sanitize(Set<String> trimmedUrls){
-        //for each trimmedUrl we get from the results, we check against the sanitizable urls
-        //and delete them if any are found
+    public boolean isSanitizable(String trimmedUrl){
+        String[] badUrls = generateBadUrls();
+        for (String badUrl : badUrls) {
+            if (badUrl.equals(trimmedUrl)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    @Override
-    public Map<Integer, String> generateSanitizableUrls(){
-        //integer value is the index of the sanitizable url, string is the actual url we check against
-        //performance should be decent with the constant lookup time
-        return new HashMap<>();
+    private String[] generateBadUrls(){
+        //pretty sure this can be done with a regex but i couldnt find one that works
+        return new String[]{
+                "https://www.instagram.com",
+                "https://nl-nl.facebook.com",
+                "https://www.youtube.com",
+                "https://twitter.com",
+                "https://nl.wikipedia.org",
+                "https://en.wikipedia.org",
+                "https://www.forbes.com",
+                "http://en.wikipedia.org",
+                "http://nl.wikiepdia.org",
+                "https://www.facebook.com"
+        };
     }
 
 }
