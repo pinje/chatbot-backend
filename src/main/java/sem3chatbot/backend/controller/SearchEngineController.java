@@ -11,12 +11,12 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/search")
-@CrossOrigin(origins = "*", allowedHeaders = {"*"})
+@CrossOrigin(origins ={"http://localhost:3000", "https://pie3bot.azurewebsites.net"}, allowedHeaders = {"*"})
 public class SearchEngineController {
     // origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net"}
     private final SearchEngineService searchEngineService;
     @GetMapping()
-    public ResponseEntity<SearchEngineTopThreeResponse> getTopThreeLinks(@RequestParam(value = "q") String query) throws IOException {
+    public ResponseEntity<SearchEngineTopThreeResponse> getTopThreeLinks(@RequestParam(value = "q")final  String query) throws IOException {
         SearchEngineTopThreeResponse res = searchEngineService.getTopLinksFromSearchQuery(query, 5);
         return ResponseEntity.ok(res);
     }
