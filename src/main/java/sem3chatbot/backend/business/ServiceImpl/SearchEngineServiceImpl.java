@@ -1,7 +1,6 @@
 package sem3chatbot.backend.business.ServiceImpl;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,6 @@ public class SearchEngineServiceImpl implements SearchEngineService {
 
     @Override
     public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(final String queryString, int limit) throws IOException {
-
         String queryStringInjected = injectSeparator(queryString);
         //dynamically change the result limit to accommodate longer search queries
         if(queryStringInjected.contains("+")){
@@ -46,6 +44,7 @@ public class SearchEngineServiceImpl implements SearchEngineService {
 
     private Set<String> findLinks(Document html){
         Elements links = html.getElementsByTag("a");
+        print(links.get(0).toString());
         print("Total links found: " + links.size());
         if(links.size() == 0){
             return new HashSet<>();
