@@ -3,7 +3,6 @@ package sem3chatbot.backend.business.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import sem3chatbot.backend.business.SearchEngineService;
@@ -18,7 +17,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class SearchEngineServiceImpl implements SearchEngineService {
     private final UrlSanitizerService urlSanitizerService;
-
     @Override
     public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(final String queryString, int limit) throws IOException {
         String queryStringInjected = injectSeparator(queryString);
@@ -41,7 +39,16 @@ public class SearchEngineServiceImpl implements SearchEngineService {
                 .links(links)
                 .build();
     }
+    @Override
+    public String injectSeparator(String queryString){
+        return queryString.replace(' ', '+');
+    }
 
+    /**
+     Finds all links located in the search results of the page.
+     @param html The raw html of the document being searched
+     @return A set containing all found links, an empty set if none are found
+     */
     private Set<String> findLinks(Document html) {
         //probably better if we do .select(li[class^=b_algo]), but this works for now
         Elements links = html.select("h2 a");
@@ -67,9 +74,5 @@ public class SearchEngineServiceImpl implements SearchEngineService {
             }
         }
       return -1;
-    }
-
-    private String injectSeparator(String queryString){
-       return queryString.replace(' ', '+');
     }
 }
