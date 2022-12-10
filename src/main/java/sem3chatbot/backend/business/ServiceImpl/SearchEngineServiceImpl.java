@@ -24,17 +24,17 @@ public class SearchEngineServiceImpl implements SearchEngineService {
         if(queryStringInjected.contains("+")){
             limit = 10;
         }
-        print("Query string format: " + queryStringInjected);
+        Logger.print("Query string format: " + queryStringInjected);
         String searchUrl = "https://bing.com/search?q=" + queryStringInjected + "&num=" + limit;
-        print("Searching..." + searchUrl);
+        Logger.print("Searching..." + searchUrl);
             Document rawHtml = Jsoup.connect(searchUrl)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
                     .referrer("http://www.bing.com")
                     .get();
 
         Set<String> links = findLinks(rawHtml);
-        links.remove("");
-        print("Returning " + links.size() + " trimmed links");
+        urlSanitizerService.sanitizeUrls(links);
+        Logger.print("Returning " + links.size() + " trimmed links");
         return SearchEngineTopThreeResponse.builder()
                 .links(links)
                 .build();
@@ -57,11 +57,6 @@ public class SearchEngineServiceImpl implements SearchEngineService {
             results.add(link.attr("href"));
         }
         return results;
-    }
-
-    //this is just for convenience in order to not call the sysout function over and over
-    private static void print(String text, Object... args){
-        System.out.printf((text) + "%n", args);
     }
     private int getDomainUrl(String absUrl){
         int occurences = 0;
