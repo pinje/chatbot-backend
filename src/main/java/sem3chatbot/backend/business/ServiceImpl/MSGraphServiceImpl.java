@@ -20,7 +20,6 @@ import java.util.Properties;
 import java.util.function.Consumer;
 
 @Service
-@AllArgsConstructor
 public class MSGraphServiceImpl implements MSGraphService {
     //we keep state, such as device code and user client data in these fields
     //which are assigned via initalizeGraph().
@@ -40,6 +39,8 @@ public class MSGraphServiceImpl implements MSGraphService {
 
         final String clientId = properties.getProperty("app.clientId");
         final String authTenantId = properties.getProperty("app.authTenant");
+        System.out.println(clientId);
+        System.out.println(authTenantId);
         final List<String> graphUserScopes = Arrays
                 .asList(properties.getProperty("app.graphUserScopes").split(","));
 
@@ -49,6 +50,7 @@ public class MSGraphServiceImpl implements MSGraphService {
                 .tenantId(authTenantId)
                 .challengeConsumer(consumer)
                 .build();
+
 
         final TokenCredentialAuthProvider authProvider =
                 new TokenCredentialAuthProvider(graphUserScopes, _deviceCodeCredential);
