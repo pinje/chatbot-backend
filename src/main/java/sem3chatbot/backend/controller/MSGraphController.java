@@ -30,7 +30,8 @@ public class MSGraphController {
             System.out.println("Unable to read OAuth configuration");
             return null;
         }
-        graph.initializeGraph(oAuthProperties, consumer -> System.out.println(consumer.getMessage()));
+        //this should print the authentication code to the console but for now its not working for some reason
+        graph.initializeGraph(oAuthProperties, challenge -> System.out.println(challenge.getMessage()));
         return ResponseEntity.ok("we chillin");
     }
 

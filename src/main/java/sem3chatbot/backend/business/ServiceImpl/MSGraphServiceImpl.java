@@ -29,7 +29,7 @@ public class MSGraphServiceImpl implements MSGraphService {
 
 
     @Override
-    public void initializeGraph(Properties properties, Consumer<DeviceCodeInfo> consumer) throws Exception {
+    public void initializeGraph(Properties properties, Consumer<DeviceCodeInfo> challenge) throws Exception {
         //add custom exception for this
         if (properties == null) {
             throw new Exception("Properties cannot be null");
@@ -48,7 +48,7 @@ public class MSGraphServiceImpl implements MSGraphService {
         _deviceCodeCredential = new DeviceCodeCredentialBuilder()
                 .clientId(clientId)
                 .tenantId(authTenantId)
-                .challengeConsumer(consumer)
+                .challengeConsumer(challenge)
                 .build();
 
 
@@ -112,5 +112,6 @@ public class MSGraphServiceImpl implements MSGraphService {
     @Override
     public void initializeGraphForAppOnlyAuth() throws Exception {
     //need a client secret to make this work(AAD activation).
+        throw new UnsupportedOperationException();
     }
 }
