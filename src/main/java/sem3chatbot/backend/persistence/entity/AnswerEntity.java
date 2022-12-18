@@ -24,9 +24,6 @@ public class AnswerEntity{
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "questionKeywordIds")
-    private String questionsKeywords;
-
     @Column(name = "auxiliaryKeywordIds")
     private String secondaryKeywords;
 
