@@ -9,7 +9,6 @@ import sem3chatbot.backend.persistence.RatingRepository;
 import sem3chatbot.backend.persistence.entity.MessageEntity;
 import sem3chatbot.backend.persistence.entity.RatingEntity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,11 +19,11 @@ public class CreateLogServiceImpl implements CreateLogService{
     private final LogRepository logRepository;
     @Override
     public void createLog (CreateLogRequest request) {
-        RatingEntity rating = RatingEntity.builder().rating(request.getRating()).build();
-        final RatingEntity savedRating = ratingRepository.save(rating);
+       final RatingEntity rating = RatingEntity.builder().rating(request.getRating()).build();
+
 
         List<MessageEntity> messages = Arrays.stream(request.getMessages()).toList();
-        messages.forEach(m -> m.setRating(savedRating));
+        messages.forEach(m -> m.setRating(rating));
         logRepository.saveAll(messages);
     }
 }

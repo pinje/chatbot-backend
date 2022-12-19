@@ -6,14 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Builder
 @Entity
-@Table(name ="log")
+@Table(name ="rating")
 @AllArgsConstructor
 @NoArgsConstructor
 public class RatingEntity{
