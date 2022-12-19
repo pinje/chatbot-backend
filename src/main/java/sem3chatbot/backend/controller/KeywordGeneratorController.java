@@ -11,7 +11,7 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/generate")
-@CrossOrigin(origins ={"http://localhost:3000", "https://pie3bot.azurewebsites.net"}, allowedHeaders = {"*"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net", "https://stichtingfontys.sharepoint.com"}, allowedHeaders = {"*"}, allowCredentials="true")
 public class KeywordGeneratorController {
     private final KeywordGeneratorService keywordGeneratorService;
 

@@ -11,7 +11,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/search")
-@CrossOrigin(origins ={"http://localhost:3000", "https://pie3bot.azurewebsites.net"}, allowedHeaders = {"*"})
+@CrossOrigin(origins ={"http://localhost:3000", "https://pie3bot.azurewebsites.net", "https://stichtingfontys.sharepoint.com"}, allowedHeaders = {"*"})
 public class SearchEngineController {
     // origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net"}
     private final SearchEngineService searchEngineService;

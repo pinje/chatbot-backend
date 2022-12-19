@@ -8,7 +8,7 @@ import sem3chatbot.backend.domain.requests.CreateLogRequest;
 
 @RestController
 //@CrossOrigin(origins = "http://127.0.0.1:5173/", allowedHeaders = "*", allowCredentials = "true")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net", "https://stichtingfontys.sharepoint.com"}, allowedHeaders = {"*"}, allowCredentials="true")
 @RequestMapping("/log")
 @RequiredArgsConstructor
 public class LogController{
