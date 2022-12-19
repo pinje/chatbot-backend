@@ -24,6 +24,9 @@ public class MessageEntity{
     //    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JoinColumn(name = "senderId")
 //    private UserEntity sender;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "rating_id")
+    private RatingEntity rating;
     @Column(name="type")
     private String type;
     @Column(name="time")

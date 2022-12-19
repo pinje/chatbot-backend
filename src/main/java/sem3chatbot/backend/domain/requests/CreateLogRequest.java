@@ -8,5 +8,5 @@ import sem3chatbot.backend.persistence.entity.MessageEntity;
 @Builder
 public class CreateLogRequest{
         private MessageEntity[] messages;
-
+        private long rating;
 }
