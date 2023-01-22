@@ -21,7 +21,6 @@ public class ResponseController {
         BotResponse res = responseService.processQuestion(request);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
-
     @GetMapping()
     public ResponseEntity<String> processQuestion () {
         return ResponseEntity.status(HttpStatus.OK).body("Hi");
