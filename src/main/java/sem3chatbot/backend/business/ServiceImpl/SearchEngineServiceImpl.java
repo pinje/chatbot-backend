@@ -3,6 +3,7 @@ package sem3chatbot.backend.business.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import sem3chatbot.backend.business.SearchEngineService;
@@ -27,16 +28,26 @@ public class SearchEngineServiceImpl implements SearchEngineService {
         Logger.print("Query string format: " + queryStringInjected);
         String searchUrl = "https://bing.com/search?q=" + queryStringInjected + "&num=" + limit;
         Logger.print("Searching..." + searchUrl);
-            Document rawHtml = Jsoup.connect(searchUrl)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
-                    .referrer("http://www.bing.com")
-                    .get();
+        Document rawHtml = Jsoup.connect(searchUrl)
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
+                .referrer("http://www.bing.com")
+                .get();
 
-        Set<String> links = findLinks(rawHtml);
+        Elements results = rawHtml.select("li.b_algo h2 a");
+        Set<String> links = new HashSet<>();
+        Set<String> titles = new HashSet<>();
+        for (Element result : results) {
+            String title = result.text();
+            String link = result.attr("href");
+            links.add(link);
+            titles.add(title);
+        }
+
         urlSanitizerService.sanitizeUrls(links);
         Logger.print("Returning " + links.size() + " trimmed links");
         return SearchEngineTopThreeResponse.builder()
                 .links(links)
+                .titles(titles)
                 .build();
     }
     @Override
