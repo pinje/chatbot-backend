@@ -10,7 +10,7 @@ import sem3chatbot.backend.domain.UpdateTopicRequest;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
 @RequestMapping("/faq-topics")
 @RequiredArgsConstructor
 public class FAQTopicController {

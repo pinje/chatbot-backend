@@ -12,17 +12,14 @@ import sem3chatbot.backend.domain.UserInput;
 @RestController
 @RequestMapping("/responses")
 @AllArgsConstructor
-@CrossOrigin(origins = {"*"}, allowedHeaders = {"*"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://pie3bot.azurewebsites.net", "https://stichtingfontys.sharepoint.com"}, allowedHeaders = {"*"}, allowCredentials = "true")
 public class ResponseController {
     private final ResponseService responseService;
 
     @PostMapping()
     public ResponseEntity<BotResponse> processQuestion(@RequestBody @Validated UserInput request){
+        System.out.println("hi");
         BotResponse res = responseService.processQuestion(request);
         return ResponseEntity.status(HttpStatus.OK).body(res);
-    }
-    @GetMapping()
-    public ResponseEntity<String> processQuestion () {
-        return ResponseEntity.status(HttpStatus.OK).body("Hi");
     }
 }
