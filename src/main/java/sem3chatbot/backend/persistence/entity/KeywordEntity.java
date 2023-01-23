@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "keywords")
+//@Table(name = "keywords")
+@Table(name = "keywords_refactored")
 @Entity
 @Builder
 @Data
@@ -29,6 +30,9 @@ public class KeywordEntity {
 
     @Column(name = "timestamp")
     private Date timestamp;
+
+    @Column(name = "synonyms")
+    private String synonyms;
 
     @Column(name = "type")
     private String type;

@@ -13,4 +13,5 @@ import java.util.Set;
 @NoArgsConstructor
 public class SearchEngineTopThreeResponse {
     Set<String> links;
+    Set<String> titles;
 }

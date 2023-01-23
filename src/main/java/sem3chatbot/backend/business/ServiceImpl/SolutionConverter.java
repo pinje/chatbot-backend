@@ -9,7 +9,7 @@ public class SolutionConverter {
     {
         return Solution.builder()
                 .id(entity.getId())
-                .text(entity.getText())
+                .text(entity.getAnswer())
                 .build();
     }
 }

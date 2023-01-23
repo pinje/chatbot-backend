@@ -19,11 +19,13 @@ public class CreateLogServiceImpl implements CreateLogService{
     private final LogRepository logRepository;
     @Override
     public void createLog (CreateLogRequest request) {
-       final RatingEntity rating = RatingEntity.builder().rating(request.getRating()).build();
+        final RatingEntity rating = RatingEntity.builder().rating(request.getRating()).build();
+        final RatingEntity stored = ratingRepository.save(rating);
 
-
-        List<MessageEntity> messages = Arrays.stream(request.getMessages()).toList();
-        messages.forEach(m -> m.setRating(rating));
-        logRepository.saveAll(messages);
+        if(request.getMessages() != null) {
+            List<MessageEntity> messages = Arrays.stream(request.getMessages()).toList();
+            messages.forEach(m -> m.setRating(stored));
+            logRepository.saveAll(messages);
+        }
     }
 }
