@@ -22,6 +22,7 @@ public class FAQQuestionConverter {
         System.out.println("PASSED FOR: " + entity.getId());
         return FAQQuestion.builder()
                 .id(entity.getId() == null ? null : entity.getId())
+                .parentId(entity.getParent() == null ? null : entity.getParent().getId())
                 .questionText(entity.getQuestionText())
                 .questionTextDutch(entity.getQuestionTextDutch())
                 .topicId(entity.getTopicId() == null ? null :FAQTopicConverter.convert(entity.getTopicId()))

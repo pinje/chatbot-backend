@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class FAQQuestion{
     private Long id;
+    private Long parentId;
     private String questionText;
     private String questionTextDutch;
     private FAQTopic topicId;
