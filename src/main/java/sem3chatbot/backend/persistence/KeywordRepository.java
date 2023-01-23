@@ -17,4 +17,6 @@ public interface KeywordRepository extends JpaRepository<KeywordEntity, Long> {
     List<KeywordEntity> findByType(String type);
 
     KeywordEntity findByText(String text);
+
+    boolean existsByText(String text);
 }
