@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sem3chatbot.backend.business.QuestionAnsweringService;
 import sem3chatbot.backend.business.ResponseService;
 import sem3chatbot.backend.domain.BotResponse;
 import sem3chatbot.backend.domain.UserInput;
@@ -16,9 +17,17 @@ import sem3chatbot.backend.domain.UserInput;
 public class ResponseController {
     private final ResponseService responseService;
 
+    private final QuestionAnsweringService questionAnsweringService;
+
     @PostMapping()
     public ResponseEntity<BotResponse> processQuestion(@RequestBody @Validated UserInput request){
-        BotResponse res = responseService.processQuestion(request);
+//        BotResponse res = responseService.processQuestion(request);
+        String answer = questionAnsweringService.processUserInput(request);
+
+        BotResponse res = BotResponse.builder()
+                .response(answer)
+                .build();
+
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

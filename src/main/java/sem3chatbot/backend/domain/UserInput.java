@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInput {
     private String question;
+    private String category;
+//    private String currentPage;
 }
