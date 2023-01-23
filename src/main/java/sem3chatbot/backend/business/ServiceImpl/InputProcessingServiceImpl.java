@@ -122,7 +122,4 @@ public class InputProcessingServiceImpl implements InputProcessingService {
                 .map(Keyword::getId)
                 .collect(Collectors.toList());
     }
-
-
-
 }
