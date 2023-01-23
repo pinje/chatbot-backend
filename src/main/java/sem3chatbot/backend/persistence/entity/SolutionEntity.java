@@ -34,6 +34,8 @@ public class SolutionEntity {
 
     @Column(name = "answer")
     private String answer;
+    @Column(name = "dutch_answer")
+    private String dutchAnswer;
 
 //    @Column(name = "category_solution")
 //    private Boolean categoryEntity;
