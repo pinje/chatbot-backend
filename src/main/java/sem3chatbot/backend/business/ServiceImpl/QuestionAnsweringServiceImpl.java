@@ -38,7 +38,7 @@ public class QuestionAnsweringServiceImpl  implements QuestionAnsweringService {
         List<KeywordEntity> kw_UserInput = getKeywords_inQuestion(request.getQuestion());
 
         List<SolutionEntity> possible_solutions = new ArrayList<>();
-        if(request.getCategory().equals("") == false){
+        if(request.getCategory() != null){
             possible_solutions = findAnswer_FilterCategory(kw_UserInput, request.getCategory());
         }
         else{
@@ -294,11 +294,15 @@ public class QuestionAnsweringServiceImpl  implements QuestionAnsweringService {
 
         List<KeywordEntity> allKw = keywordRepository.findAll();
 
-        for(KeywordEntity kw: allKw){
-            List<String> synonyms = Collections.list(new StringTokenizer(kw.getSynonyms().toLowerCase(), ",")).stream().map(token -> (String) token).toList();
+        System.out.println(allKw);
 
-            if(synonyms.contains(keyword))
-                return kw;
+        for(KeywordEntity kw: allKw) {
+            if (kw.getSynonyms() != null) {
+                List<String> synonyms = Collections.list(new StringTokenizer(kw.getSynonyms().toLowerCase(), ",")).stream().map(token -> (String) token).toList();
+
+                if (synonyms.contains(keyword))
+                    return kw;
+            }
         }
 
         return null;
