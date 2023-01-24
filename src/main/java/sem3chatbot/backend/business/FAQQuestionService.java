@@ -1,6 +1,7 @@
 package sem3chatbot.backend.business;
 
 import sem3chatbot.backend.domain.CreateQuestionRequest;
+import sem3chatbot.backend.domain.FAQQuestion;
 import sem3chatbot.backend.domain.GetQuestionsByTopicIdRequest;
 import sem3chatbot.backend.domain.GetQuestionsByTopicIdResponse;
 import sem3chatbot.backend.business.exception.InvalidQuestionIdException;
@@ -26,4 +27,6 @@ public interface FAQQuestionService {
      * @throws InvalidQuestionIdException if the question ID is not present in the database.
      */
     void delete(long questionId);
+
+    FAQQuestion getById(long questionId);
 }

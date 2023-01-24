@@ -95,23 +95,15 @@ public class FAQQuestionServiceImpl implements FAQQuestionService{
         }
     }
 
-
-
-//    @Override
-//    public void create(CreateQuestionRequest request) throws TopicQuestionLimitExceededException {
-//        var parent = questionRepository.findById(request.getParentId());
-//        var topic = topicRepository.findById(request.getTopicId());
-//        FAQQuestionEntity newQuestion;
-//        if(parent.isEmpty() && questionRepository.countAllByTopicId(request.getTopicId()) >= 5){
-//            throw new TopicQuestionLimitExceededException();
-//        }
-//        if(parent.isEmpty() && questionRepository.countAllByTopicId(request.getTopicId()) < 5){
-//            newQuestion = FAQQuestionEntity.builder()
-//                    .questionText(request.getQuestionText())
-//                    .topicId(topic.get())
-//                    .build();
-//            questionRepository.save(newQuestion);
-//        }
-
+    @Override
+    public FAQQuestion getById (long questionId) {
+        var questionOptional = questionRepository.findById(questionId);
+        if(questionOptional.isPresent()){
+            return FAQQuestionConverter.convert(questionOptional.get());
+        }
+        else{
+            throw new InvalidQuestionIdException();
+        }
+    }
 
 }
