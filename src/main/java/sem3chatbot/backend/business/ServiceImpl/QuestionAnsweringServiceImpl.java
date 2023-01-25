@@ -3,6 +3,7 @@ package sem3chatbot.backend.business.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sem3chatbot.backend.business.QuestionAnsweringService;
+import sem3chatbot.backend.domain.BotResponse;
 import sem3chatbot.backend.domain.UserInput;
 import sem3chatbot.backend.domain.answers.Solution;
 import sem3chatbot.backend.persistence.*;
@@ -32,7 +33,7 @@ public class QuestionAnsweringServiceImpl  implements QuestionAnsweringService {
     private final Integer amountOfTopPossibleAnswers_toSend = 3;
 
 //    public List<SolutionEntity> ProcessUserInput(UserInput request)
-    public String processUserInput(UserInput request){
+    public BotResponse processUserInput(UserInput request){
 
         // All the keywords in the question
         List<KeywordEntity> kw_UserInput = getKeywords_inQuestion(request.getQuestion());
@@ -48,17 +49,18 @@ public class QuestionAnsweringServiceImpl  implements QuestionAnsweringService {
         return getAnswer_FromSolution(possible_solutions);
     }
 
-    private String getAnswer_FromSolution(List<SolutionEntity> solutions){
+    private BotResponse getAnswer_FromSolution(List<SolutionEntity> solutions){
 
         // Default answer (hard coded, but should be in DB)
-        String answer = "Sorry, I couldn't find an answer to your question. Maybe try again asking it differently.";
+         BotResponse response = BotResponse.builder().answer("Sorry, I couldn't find an answer to your question. Maybe try again asking it differently.")
+                .answerDutch("Sorry, ik kon geen antwoord vinden op je vraag. Probeer het nog eens anders te vragen.").build();
 
         // 0 solutions means default message should be sent.
         if(solutions.size() > 0){
-            answer = solutions.get(0).getAnswer();
+            response.setAnswer(solutions.get(0).getAnswer());
+            response.setAnswerDutch(solutions.get(0).getDutchAnswer()!=null? solutions.get(0).getDutchAnswer() :" ");
         }
-
-        return answer;
+        return response;
     }
 
     private List<SolutionEntity> findAnswer_FilterCategory(List<KeywordEntity> kw_UserInput, String categoryInput){

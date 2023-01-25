@@ -19,11 +19,8 @@ public class ResponseController {
 
     @PostMapping()
     public ResponseEntity<BotResponse> processQuestion(@RequestBody @Validated UserInput request){
-        String answer = questionAnsweringService.processUserInput(request);
-
-        BotResponse res = BotResponse.builder()
-                .response(answer)
-                .build();
+        BotResponse res =  questionAnsweringService.processUserInput(request);
+        System.out.println(res);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 }
