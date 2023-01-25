@@ -29,6 +29,36 @@ dependencies {
 	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
 	implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
 }
+node {
+	download = true
+	// Set the work directory for unpacking node
+	workDir = file("${project.buildDir}/nodejs")
+
+	// Set the work directory for NPM
+	npmWorkDir = file("${project.buildDir}/npm")
+}
+
+task appNpmInstall(type: NpmTask) {
+	description = "Installs all dependencies from package.json"
+	workingDir = file("${project.projectDir}/src/s3-chatbot-frontend")
+	args = ["install"]
+}
+
+task appNpmBuild(type: NpmTask) {
+	description = "Builds production version of the webapp"
+	workingDir = file("${project.projectDir}/src/s3-chatbot-frontend")
+	args = ["run", "build"]
+}
+
+task copyWebApp(type: Copy) {
+	from 'src/s3-chatbot-frontend/build'
+	into 'src/main/resources/static'
+//	into 'build/resources/main/static/.'
+}
+appNpmBuild.dependsOn appNpmInstall
+copyWebApp.dependsOn appNpmBuild
+compileJava.dependsOn copyWebApp
+
 azurewebapp {
 	resourceGroup = 'PIE-SES3-GRP3'
 	appName = 'pie3bot'
@@ -38,8 +68,6 @@ azurewebapp {
 		webContainer = 'Java SE'
 	}
 }
-tasks.named('test') {
-	useJUnitPlatform()
-}
+
 
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
