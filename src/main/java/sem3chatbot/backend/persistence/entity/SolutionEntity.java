@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name = "solutions")
+//@Table(name = "solutions")
+@Table(name = "solutions_refactored")
 @Entity
 @Builder
 @Data
@@ -22,6 +23,29 @@ public class SolutionEntity {
 
     // This would represent the URL of a fontys page for example for the current version of the chatbot.
     //
-    @Column(unique = true, name = "answerText")
-    private String text;
+//    @Column(unique = true, name = "answerText")
+//    private String text;
+
+    @Column(name = "category")
+    private Long category;
+
+    @Column(name = "questions")
+    private String questions;
+
+    @Column(name = "answer")
+    private String answer;
+    @Column(name = "dutch_answer")
+    private String dutchAnswer;
+
+//    @Column(name = "category_solution")
+//    private Boolean categoryEntity;
+//
+//    @Column(name = "children_solutions")
+//    private String childrenSolutions;
+
+//    @Column(name = "metadata")
+//    private String metadata;
+//
+//    @Column(name = "role_requirement")
+//    private String roleRequirement;
 }

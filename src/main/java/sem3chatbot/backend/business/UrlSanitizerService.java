@@ -1,7 +1,8 @@
 package sem3chatbot.backend.business;
 
 
+import java.util.Set;
 
 public interface UrlSanitizerService {
-    boolean isSanitizable(String trimmedUrl);
+   void sanitizeUrls(Set<String> urls);
 }

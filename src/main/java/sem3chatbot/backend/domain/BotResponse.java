@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class BotResponse {
-    private String response;
+    private String answer;
+    private String answerDutch;
 }

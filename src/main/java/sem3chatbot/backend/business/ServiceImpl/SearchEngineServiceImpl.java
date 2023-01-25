@@ -18,7 +18,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class SearchEngineServiceImpl implements SearchEngineService {
     private final UrlSanitizerService urlSanitizerService;
-
     @Override
     public SearchEngineTopThreeResponse getTopLinksFromSearchQuery(final String queryString, int limit) throws IOException {
         String queryStringInjected = injectSeparator(queryString);
@@ -26,55 +25,49 @@ public class SearchEngineServiceImpl implements SearchEngineService {
         if(queryStringInjected.contains("+")){
             limit = 10;
         }
-        print("Query string format: " + queryStringInjected);
-        String searchUrl = "https://google.com/search?q=" + queryStringInjected + "&num=" + limit;
-        print("Searching..." + searchUrl);
-            Document rawHtml = Jsoup.connect(searchUrl)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
-                    .referrer("http://www.google.com")
-                    .get();
+        Logger.print("Query string format: " + queryStringInjected);
+        String searchUrl = "https://bing.com/search?q=" + queryStringInjected + "&num=" + limit;
+        Logger.print("Searching..." + searchUrl);
+        Document rawHtml = Jsoup.connect(searchUrl)
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
+                .referrer("http://www.bing.com")
+                .get();
 
-        Set<String> links = findLinks(rawHtml);
-        links.remove("");
-        print("Returning " + links.size() + " trimmed links");
+        Elements results = rawHtml.select("li.b_algo h2 a");
+        Set<String> links = new HashSet<>();
+        Set<String> titles = new HashSet<>();
+        for (Element result : results) {
+            String title = result.text();
+            String link = result.attr("href");
+            links.add(link);
+            titles.add(title);
+        }
+
+        urlSanitizerService.sanitizeUrls(links);
+        Logger.print("Returning " + links.size() + " trimmed links");
         return SearchEngineTopThreeResponse.builder()
                 .links(links)
+                .titles(titles)
                 .build();
     }
-
-    private Set<String> findLinks(Document html){
-        Elements links = html.getElementsByTag("a");
-        print(links.get(0).toString());
-        print("Total links found: " + links.size());
-        if(links.size() == 0){
-            return new HashSet<>();
-        }
-        Set<String> results = new HashSet<>();
-        for (Element link : links) {
-            String nodeUrl = link.attr("ping");
-                if (nodeUrl.length() > 1) {
-                    try {
-                        String redirectUrl = nodeUrl.substring(31);
-                        int cutIndex = getDomainUrl(redirectUrl);
-                        String actualUrl = redirectUrl.substring(0, cutIndex);
-                        if(!actualUrl.startsWith("https://policies") &&
-                                !actualUrl.startsWith("https://support") &&
-                                !actualUrl.startsWith("https://translate") &&
-                                !urlSanitizerService.isSanitizable(actualUrl)){
-                            results.add(actualUrl);
-                        }
-                    }
-                    catch(StringIndexOutOfBoundsException ex){
-                        print("Query string threw an exception: " + ex.getMessage());
-                    }
-                }
-        }
-        return results;
+    @Override
+    public String injectSeparator(String queryString){
+        return queryString.replace(' ', '+');
     }
 
-    //this is just for convenience in order to not call the sysout function over and over
-    private static void print(String text, Object... args){
-        System.out.printf((text) + "%n", args);
+    /**
+     Finds all links located in the search results of the page.
+     @param html The raw html of the document being searched
+     @return A set containing all found links, an empty set if none are found
+     */
+    private Set<String> findLinks(Document html) {
+        //probably better if we do .select(li[class^=b_algo]), but this works for now
+        Elements links = html.select("h2 a");
+        Set<String> results = new HashSet<>();
+        for (var link : links) {
+            results.add(link.attr("href"));
+        }
+        return results;
     }
     private int getDomainUrl(String absUrl){
         int occurences = 0;
@@ -87,9 +80,5 @@ public class SearchEngineServiceImpl implements SearchEngineService {
             }
         }
       return -1;
-    }
-
-    private String injectSeparator(String queryString){
-       return queryString.replace(' ', '+');
     }
 }

@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class Solution {
     private Long id;
     private String text;
+    private String dutchAnswer;
+
 }
